@@ -24,21 +24,17 @@
 \DeclareGraphicsExtensions{.jpg,.png} % erlaubte Graphikobjekte
 
 \title{Domain Driven Design\\ \small eine Einleitung in das Thema}
-\author{Thomas Steglich\\
-\small \url{www.thomas-steglich.de}\\
-\small @tomsteg\\
-\small info@thomas-steglich.de\\
-\small 0151 24104316}
+\author{Thomas Steglich}
 \date{\today}
 
 \maketitle
 
 \begin{abstract}
-	\noindent In dem Buch \[Domain Driven Design(DDD)]{dddp} wird das Prizip DDD erläutert. Einige Konzepte für eine moderne Software-Architektur können (sollen) daraus übernommen oder abgeleitet werden.
+	\noindent In dem Buch~\cite[Domain Driven Design(DDD)]{dddp} wird das Prizip DDD erläutert. Einige Konzepte für eine moderne Software-Architektur können (sollen) daraus übernommen oder abgeleitet werden.
 \end{abstract}
 
 \pagestyle{fancy} % Layout Stil für Kopf- und Fusszeilen
-\lhead{\leftmark} % linker,
+\lhead{Domain Driven Design} % linker,
 \chead{} % mittlerer und
 \rhead{\rightmark} % rechter Bereich der Kopfzeile
 \lfoot{Thomas Steglich} % linker,
@@ -53,25 +49,27 @@
 
 \section{Warum DDD?}
 
-Welche Probleme können durch den Einsatz von DDD vermieden werden?
+\paragraph{Welche Probleme können durch den Einsatz von DDD vermieden werden?}
 \begin{enumerate}
 	\item Die Datenbank hat eine zu hohe Priorität im Vergleich zu Geschäftsprozessen und -vorgängen.
-	\item Objekte und Operatione werden oft nicht den fachlichen Aufgaben entsprechend benannt. Das führt zu einer zu großen Lücke zwischen den Anwendern und den Entwicklern.
-	\item Fachlogik wird von den Entwicklern in Komponenten installiert, die zur Benutzerschnittstelle oder zur Datenhaltung gehören. Außerdem werden Opterationen zum Speichern in der Datenbank mitten in der Fachlogik ausgeführt.
+	\item Objekte und Operationen werden oft nicht den fachlichen Aufgaben entsprechend benannt. Das führt zu einer zu großen Lücke zwischen den Anwendern und den Entwicklern.
+	\item Fachlogik wird von den Entwicklern in Komponenten installiert, die zur Benutzerschnittstelle oder zur Datenhaltung gehören. Außerdem werden Operationen zum Speichern in der Datenbank mitten in der Fachlogik ausgeführt.
 	\item Defekte, langsame und sich gegenseitig behindernde Datenbankabfragen blockieren die Anwender.
 	\item Die Entwickler schaffen falsche Abstraktionen um alle gegenwärtigen und möglichen zukünftigen Bedürfnissen gerecht zu werden.
 	\item Services sind untereinander zu stark gekoppelt.
 \end{enumerate}
 
+\paragraph{Zitate}
+
 \begin{quote}
-	Die Alternative zu gutem Design ist schlechtes Design, nicht überhaupt kein Design.~\[Douglas Martin]{martin}
+	Die Alternative zu gutem Design ist schlechtes Design, nicht überhaupt kein Design.~\cite[Douglas Martin]{martin}
 \end{quote}
 
 \begin{quote}
-	Die meisten Menschen machen den Fehler zu denken, dass es bei Design nur darum geht, wie es aussieht. \dots Es geht nicht nur darum, wie etwas aussieht und sich anfühlt. Design ist, wie etwas funktioniert.~\[Steve Jobs]{}
+	Die meisten Menschen machen den Fehler zu denken, dass es bei Design nur darum geht, wie es aussieht. \dots Es geht nicht nur darum, wie etwas aussieht und sich anfühlt. Design ist, wie etwas funktioniert. \cite[Steve Jobs]{}
 \end{quote}
 
-\section{Definitionen}
+\section{Strategisches Design}
 
 \begin{Def}[Domain]
 	Im Rahmen von DDD versteht man unter der Domäne die Anwendungsdomäne, die fachliche Aufgabenstellung unter der die Software entwickelt wird.
@@ -85,14 +83,14 @@ Im DDD geht es in erster Linie darum, eine Ubiquitous Language in einem bestimmt
 \end{Def}
 
 \begin{Def}[Ubiquitous Language]
-	Innerhalb eines bounded context gilt eine ubiquitous language. Die Begriffe innerhalb dieser Sprache sind eindeutig. Sie wird von den Teammitgliedern genutzt und ist Basis des Softwaremodells. Es muss gewärleistet sein, dass die Sprache jedem Teammitglied zur Verfügung steht.
+	Innerhalb eines bounded context gilt eine ubiquitous language. Die Begriffe innerhalb dieser Sprache sind eindeutig. Sie wird von den Teammitgliedern genutzt und ist Basis des Softwaremodells. Es muss gewährleistet sein, dass die Sprache jedem Teammitglied zur Verfügung steht.
 \end{Def}
 
 Bei der Entwicklung der ubiquitous language darf man sich nicht verzetteln. Letztlich besteht das Domänenmodell nicht aus Definitionen, Diagrammen oder Spezifikationen. Das Domänenmodell ist der Code und der Code ist das Modell (Reverse Engineering).
 
 Jeweils einem Team wird ein bounded context zugewiesen. Für jeden bounded context sollte es ein von den anderen getrenntes Quellcode Repository geben. Für jeden bounded context sollte es ein Datenbank-Schema geben, das klar von den anderen abgegrenzt ist. Die Kunst besteht darin, diese Grenzen zu wahren und zu bestimmen. Die Gefahr besteht darin, dass der bounded context zu viel umfasst.
 
-Was sind Hinweise darauf, dass ein bounded context aus dem Ruder läuft?
+\paragraph{Was sind Hinweise darauf, dass ein bounded context aus dem Ruder läuft?}
 \begin{itemize}
 	\item Das Team wird zu groß. Die optimale Teamgröße ist erreicht, wenn das ganze Team von zwei großen Pizzas satt wird.
 	\item Die Begriffe verschwimmen und bekommen mehrere Bedeutungen.
@@ -104,11 +102,85 @@ Was sind Hinweise darauf, dass ein bounded context aus dem Ruder läuft?
 
 Ein bounded context enthält aber nicht nur das Domänenmodell, sondern auch Komponenten, die sich um die Kommunikation mit der Außenwelt kümmern (Adaptor).
 
-\no{*} % alle Literaturangaben werden genannt, auch wenn keine Verweise auf sie zeigen
+\begin{Def}[Subdomain]
+	Meistens lässt sich die Geschäftsdomäne nicht mit einem bounded context darstellen. Er wäre zu groß. Daher unterteilt man in subdomains, die für sich wieder einen bounded context definieren.
+\end{Def}
+
+In Altsystemen ist meist DDD nicht (voll) umgesetzt. Oft entsprechen sie dem Pattern big ball of mud. Da in ihnen keine bounded context festgelegt wurden, spricht man auch von unbounded legacy systems. Man könnte diese Altsysteme in mehrere logische Domänenmodelle unterteilen und für jedes einzelne eine ubiquitous language definieren. Tatsächlich hilft dieses Vorgehen, wenn man auf DDD umsteigt oder das Altsystem in eine Umgebung von anderen DDD-Systemen integrieren will.
+
+\begin{Def}[Context Mapping]
+	An der Schnittstelle zwischen zwei Subdomains treffen zwei ubiquitous languages aufeinander. Die unterschiedlichen Begriffe und Operationen in den jeweiligen domains müssen auf einander gemappt werden. Dies bezeichnet man als context mapping.
+\end{Def}
+
+\paragraph{Arten von Mapping}
+\begin{itemize}
+	\item Partnership; die Ziele der beiden involvierten Teams sind voneinander abhängig; für die Synchronisierung nutzen sie Continous Integration;
+	\item Shared Kernel; zwei Teams teilen sich ein kleines gemeinsames Modell als Schnittmenge von zwei bounded context; ein shared kernal erfordert ein hohes Maß an Kommunikation;
+	\item Customer Supplier; der supplier (upstream) stellt zur Verfügung, was der customer (downstream) braucht;
+	\item Conformist; der upstream stellt etwas zur Verfügung, was der downstream benutzen darf;
+	\item Anticorruption Layer (ACL); das downstream Team erzeugt eine Übersetzungsschicht (ACL);
+	\item Open Host Service; das upstream Team stellt einen offen angebotenen Dienst zur Verfügung; die bereit gestellte API sollte gut dokumentiert sein; Open Host Services sind leichter zu konsumieren als Supplier;
+	\item Published Language; oft bietet ein Open Host Service eine Published Language an;
+	\item Separate Ways; keine Verbindung zwischen zwei bounded context;
+	\item Big Ball of Mud; Kein Kontext Mapping;
+	\begin{itemize}
+		\item ungewollte und unzulässige Beziehungen und Abhängigkeiten
+		\item Eine Änderung schlägt Wellen über das ganze System.
+		\item Nur über Generationen weitergegebenes Geheimwissen und einzelne Heldentaten --- alle Sprachen auf einmal sprechen --- retten das System vor dem endgültigen Kollaps.
+	\end{itemize}
+\end{itemize}
+
+Wenn ein bounded context mit einem big ball of mud System ein context mapping eingeht, so sollte das neue bounded context System unbedingt eine ACL vorschalten, so dass es nicht die ubiquitous language des big ball of mud übernimmt.
+
+\paragraph{Technische Lösungen für Context Mapping}
+\begin{itemize}
+	\item Remote Procedure Call (RPC) mit Simple Object Access Protocol (SOAP)
+	\item RESTful HTTP
+	\item Messaging
+	\begin{itemize}
+		\item ein client-bounded-context abonniert die domain events, die von ihrem eigenen oder einem anderen bounded context versendet werden;
+		\item at least once delivery: durch eine Empfangsbestätigung durch das Messaging System ist gewährleistet, dass eine Nachricht ausgeliefert wurde;
+		\item idempotent reciever: der Empfänger kann  damit umgehen, dass eine Nachricht mehrmals geschickt wurde, die Operation aber nur einmal ausgeführt werden soll;
+		\item die versendeten Daten können angereichert oder nachgeladen werden;
+	\end{itemize}
+\end{itemize}
+
+\section{Taktisches Design}
+
+Beim taktischen Design werden Konzepte für die Architektur innerhalb eines bounded context angewendet werden können.
+
+\begin{Def}[Entities, reference objects]
+	Objekte, welche nicht durch ihre Eigenschaften, sondern durch ihre Identität definiert werden. Beispiel: Person. Die Objekte werden mit eindeutigen Identifikatoren modelliert.
+\end{Def}
+
+\begin{Def}[value objects]
+	Objekte, die durch ihre Eigenschaft definiert werden; immutable objects, wiederverwendbar,
+\end{Def}
+
+\begin{Def}[aggregates]
+	aggregates sind Zusammenfassungen von entities und value objects und deren Assoziationen untereinander zu einer gemeinsamen transaktionalen Einheit. Von außen kann nur mit genau einer entitie auf das aggregate zugegriffen werden. Beispiel: Klassen.
+\end{Def}
+
+\paragraph{Regeln für aggregates}
+\begin{enumerate}
+	\item\label{aggrulekons} Schütze die fachliche Konsistenz von aggregates. Nach einem commit einer transaction müssen die Daten konsistent sein.
+	\item Entwirf kleine aggregates, dann ist die Einhaltung der Regel~\ref{aggrulekons} leichter. Single Responsibility Principle~(SRP).
+	\item Referenziere andere aggregates nur über ihre Identität.
+	\item Aktualisiere andere aggregates unter Verwendung von eventual consistency.
+\end{enumerate}
+
+\paragraph{aggregates modellieren}
+\begin{enumerate}
+	\item Wähle das Abstraktions-Level mit Bedacht. Ein zu hohes Abstraktions-Level führt zu vielen Spezialfällen, zu zu viel code. Man wird nie alle zukünftigen Bedürfnisse abdecken können.
+	\item Dimensioniere aggregates richtig.
+	\item Sichere aggregates durch unittests ab.
+\end{enumerate}
+
+\nocite{*} % alle Literaturangaben werden genannt, auch wenn keine Verweise auf sie zeigen
 \bibliographystyle{plain}
 \begin{thebibliography}{\hspace{1cm}}
-	\bibitem [1]{dddp} "Domain Driven Design" von Vaughn Vernon, aus dem Englischen übersetzt von Carola Lilienthal und Henning Schwertner
-	\bibitem [2]{martin} "Book Design: A Practical Introduction" von Douglas Martin, 1990
+	\bibitem [1]{dddp} ``Domain Driven Design'' von Vaughn Vernon, aus dem Englischen übersetzt von Carola Lilienthal und Henning Schwertner
+	\bibitem [2]{martin} ``Book Design: A Practical Introduction'' von Douglas Martin, 1990
 	\bibitem [3]{wikipedia} Wikipedia: Domain Driven Design \url{https://de.wikipedia.org/wiki/Domain-driven_Design}
 \end{thebibliography}
 
