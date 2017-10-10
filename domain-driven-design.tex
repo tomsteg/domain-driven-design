@@ -149,6 +149,19 @@ Wenn ein bounded context mit einem big ball of mud System ein context mapping ei
 
 Beim taktischen Design werden Konzepte, die für die Architektur innerhalb eines bounded context angewendet werden können, entworfen.
 
+\begin{Def}[aggregates]
+	aggregates nehmen Kommandos entgegen oder reagieren auf Ereignisse.
+	Sie überprüfen, ob diese zulässig sind.
+	Anschließend werden sie verarbeitet. Dabei können neue Ereignisse und/oder Kommandos ausgelöst werden.
+	Das aggregate darf Daten zu dem Geschäftsvorgang speichern. 
+	Das aggregate muss vor und nach der Verarbeitung konsistent sein.
+	Das bezieht sich aber nur auf das aggregate selbst und schließt gleichzeitig nicht andere aggregates mit ein.
+	Der Zustand vor und nach der Verarbeitung muss reproduzierbar sein(unittest).
+	aggregates sind Zusammenfassungen von entities und value objects und deren Assoziationen untereinander zu einer gemeinsamen transaktionalen Einheit.
+	Von außen kann nur mit genau einer entity auf das aggregate zugegriffen werden.
+	Auf die inneren entities darf nicht direkt zugegriffen werden.
+\end{Def}
+
 \begin{Def}[Entities, reference objects]
 	Objekte, welche nicht durch ihre Eigenschaften, sondern durch ihre Identität definiert werden. Beispiel: Person. Die Objekte werden mit eindeutigen Identifikatoren modelliert.
 \end{Def}
@@ -157,24 +170,20 @@ Beim taktischen Design werden Konzepte, die für die Architektur innerhalb eines
 	Objekte, die durch ihre Eigenschaft definiert werden; immutable objects, wiederverwendbar,
 \end{Def}
 
-\begin{Def}[aggregates]
-	aggregates sind Zusammenfassungen von entities und value objects und deren Assoziationen untereinander zu einer gemeinsamen transaktionalen Einheit. Von außen kann nur mit genau einer entitie auf das aggregate zugegriffen werden. Beispiel: Klassen.
-\end{Def}
-
 \paragraph{Regeln für aggregates}
 \begin{enumerate}
 	\item\label{aggrulekons} Schütze die fachliche Konsistenz von aggregates. Nach einem commit einer transaction müssen die Daten konsistent sein.
 	\item Entwirf kleine aggregates, dann ist die Einhaltung der Regel~\ref{aggrulekons} leichter. Single Responsibility Principle~(SRP).
 	\item Referenziere andere aggregates nur über ihre Identität.
 	\item Aktualisiere andere aggregates unter Verwendung von eventual consistency.
+	\item Wähle das Abstraktions-Level mit Bedacht. Ein zu hohes Abstraktions-Level führt zu vielen Spezialfällen, zu zu viel code. Man wird nie alle zukünftigen Bedürfnisse abdecken können.
+	\item Sichere aggregates durch unittests ab.
+	\item Ausgangsbasis für die Modellierung von aggregates kann ein Aktionsdiagramm sein, in welchem die Ereignisse in der Domäne zusammengefasst werden.
 \end{enumerate}
 
-\paragraph{aggregates modellieren}
-\begin{enumerate}
-	\item Wähle das Abstraktions-Level mit Bedacht. Ein zu hohes Abstraktions-Level führt zu vielen Spezialfällen, zu zu viel code. Man wird nie alle zukünftigen Bedürfnisse abdecken können.
-	\item Dimensioniere aggregates richtig.
-	\item Sichere aggregates durch unittests ab.
-\end{enumerate}
+\section{Fazit}
+
+Im Kern von DDD geht es darum, geschäftliche Zusammenhänge exakt zu analysieren, eine passende Sprache zu entwickeln und mit ihrer Hilfe die Fachlichkeit in Programmcode abzubilden.
 
 \nocite{*} % alle Literaturangaben werden genannt, auch wenn keine Verweise auf sie zeigen
 \bibliographystyle{plain}
@@ -182,6 +191,7 @@ Beim taktischen Design werden Konzepte, die für die Architektur innerhalb eines
 	\bibitem [1]{dddp} ``Domain Driven Design'' von Vaughn Vernon, aus dem Englischen übersetzt von Carola Lilienthal und Henning Schwertner
 	\bibitem [2]{martin} ``Book Design: A Practical Introduction'' von Douglas Martin, 1990
 	\bibitem [3]{wikipedia} Wikipedia: Domain Driven Design \url{https://de.wikipedia.org/wiki/Domain-driven_Design}
+	\bibitem [4]{heise} \url{https://www.heise.de/developer/artikel/Domain-driven-Design-erklaert-3130720.html?seite=4}
 \end{thebibliography}
 
 \end{document}
